@@ -52,13 +52,16 @@ resource "aws_instance" "blog" {
 
 module "alb" {
   source = "terraform-aws-modules/alb/aws"
+  version = "~> 6.0"
 
   name    = "blog-alb"
-  vpc_id = module.blog_vpc.vpc_id
+  vpc_id  = module.blog_vpc.vpc_id
   subnets = module.blog_vpc.public_subnets
 
+  load_balancer_type = "application"
+
   # Security Group
-  security_groups = module.blog_sg.security_group_id
+  security_groups = [module.blog_sg.security_group_id]
 
   target_groups = [
     {
